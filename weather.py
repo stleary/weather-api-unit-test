@@ -2,8 +2,8 @@ import requests
 
 
 
-def manipulate_weather_data():
-    api_key = "go get your own api key and put it here"
+def get_weather_data():
+    api_key = "your own api key here"
     url = f"http://api.weatherstack.com/current?access_key={api_key}&query=New York".format(api_key)
 
     response = requests.get(url)

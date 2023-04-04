@@ -1,5 +1,6 @@
 import pytest
-from  weather import manipulate_weather_data
+import requests
+from  weather import get_weather_data
 from unittest.mock import patch
 
 
@@ -8,25 +9,23 @@ from unittest.mock import patch
 
 def test_weather_data_manipulation():
     # Mock the API response
-    mock_response = {
-        "temperature": 20,
-        "humidity": 50,
-        "wind_speed": 10
-    }
+    mock_response = (20,50,10)
 
-
-    with patch("weather.manipulate_weather_data") as mock_get_weather_data:
-        mock_get_weather_data.return_value = mock_response
+    with patch("requests.get") as mock_get:
+        mock_get.return_value.status_code = 200
+        mock_get.return_value.json.return_value = {
+            "current": {
+                "temperature": mock_response[0],
+                "humidity": mock_response[1],
+                "wind_speed": mock_response[2]
+            }
+        }
 
         # Call the function that manipulates the weather data
-        manipulated_data = manipulate_weather_data()
+        manipulated_data = get_weather_data()
 
         # Check if the data was properly manipulated
-        assert manipulated_data == {
-            "temperature": 68,
-            "humidity": 50,
-            "wind_speed": 22.3694
-        }
+        assert manipulated_data == mock_response
 
 
 def main():
